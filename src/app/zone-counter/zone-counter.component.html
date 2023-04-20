@@ -1,0 +1,28 @@
+<header>
+  <h2>Zone Counter</h2>
+
+  <label>
+    CD
+    <input
+      type="checkbox"
+      name="cd"
+      [(ngModel)]="manualChangeDetectionEnabled"
+    />
+  </label>
+  <button (click)="detectChanges()">🔄</button>
+</header>
+
+<div class="info">
+  Counter: <strong>{{ counter }}</strong>
+</div>
+
+<div class="actions">
+  <button (click)="increment()">Increment</button>
+  <button (click)="incrementAfterTimeout()">
+    Increment after timeout ({{ delayTime / 1000 }}s)
+  </button>
+  <button (click)="incrementAfterAPICall()">
+    Increment after API call (>{{ delayTime / 1000 }}s)
+  </button>
+  <button (click)="reset()">Reset</button>
+</div>

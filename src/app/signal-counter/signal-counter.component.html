@@ -1,0 +1,16 @@
+<h2>Signal Counter</h2>
+
+<div class="info">
+  Counter: Counter: <strong>{{ counter() }}</strong>
+</div>
+
+<div class="actions">
+  <button (click)="increment()">Increment</button>
+  <button (click)="incrementAfterTimeout()">
+    Increment after timeout ({{ delayTime / 1000 }}s)
+  </button>
+  <button (click)="incrementAfterAPICall()">
+    Increment after API call (>{{ delayTime / 1000 }}s)
+  </button>
+  <button (click)="reset()">Reset</button>
+</div>
