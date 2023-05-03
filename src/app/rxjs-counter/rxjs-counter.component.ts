@@ -9,8 +9,9 @@ import {
   switchMap,
   take,
   shareReplay,
+  map,
 } from 'rxjs';
-import { log } from '../app.models';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-rxjs-counter',
@@ -37,23 +38,27 @@ export class RxJsCounterComponent {
     ),
     shareReplay(1)
   );
+  public doubleCounter$ = this.counter$.pipe(map((n) => n * 2));
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.counter$
+      .pipe(takeUntilDestroyed())
+      .subscribe((n) =>
+        console.log(`[${this.COUNTER_NAME}] received new value ${n}`)
+      );
+  }
 
   public increment() {
     this.counterIncrement$.next(1);
-    this.counter$.pipe(take(1)).subscribe((n) => log(this, 'increment', n));
   }
 
   public incrementByTwo() {
     this.counterIncrement$.next(2);
-    this.counter$.pipe(take(1)).subscribe((n) => log(this, 'increment', n));
   }
 
   public incrementAfterTimeout() {
     setTimeout(() => {
       this.counterIncrement$.next(1);
-      this.counter$.pipe(take(1)).subscribe((n) => log(this, 'increment', n));
     }, this.delayTime);
   }
 
@@ -61,14 +66,10 @@ export class RxJsCounterComponent {
     this.http
       .get('https://dummyjson.com/products/1')
       .pipe(delay(this.delayTime))
-      .subscribe(() => {
-        this.counterIncrement$.next(1);
-        this.counter$.pipe(take(1)).subscribe((n) => log(this, 'increment', n));
-      });
+      .subscribe(() => this.counterIncrement$.next(1));
   }
 
   public reset() {
     this.counterReset$.next();
-    this.counter$.pipe(take(1)).subscribe((n) => log(this, 'reset', n));
   }
 }

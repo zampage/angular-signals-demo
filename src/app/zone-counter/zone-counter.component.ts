@@ -6,7 +6,6 @@ import {
 import { JsonPipe } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { delay } from 'rxjs';
-import { log } from '../app.models';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -24,20 +23,29 @@ export class ZoneCounterComponent {
 
   public manualChangeDetectionEnabled: boolean = false;
 
-  public counter: number = 0;
+  private _counter!: number;
+  public set counter(n: number) {
+    this._counter = n;
+    this.doubleCounter = n * 2;
+    console.log(`[${this.COUNTER_NAME}] received new value ${n}`);
+  }
+  public get counter() {
+    return this._counter;
+  }
+  public doubleCounter!: number;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
+    this.counter = 0;
+  }
 
   public increment() {
     this.counter += 1;
-    log(this, 'increment', this.counter);
 
     if (this.manualChangeDetectionEnabled) this.cdr.markForCheck();
   }
 
   public incrementByTwo() {
     this.counter += 2;
-    log(this, 'increment', this.counter);
 
     if (this.manualChangeDetectionEnabled) this.cdr.markForCheck();
   }
@@ -45,7 +53,6 @@ export class ZoneCounterComponent {
   public incrementAfterTimeout() {
     setTimeout(() => {
       this.counter += 1;
-      log(this, 'incrementAfterTimeout', this.counter);
 
       if (this.manualChangeDetectionEnabled) this.cdr.markForCheck();
     }, this.delayTime);
@@ -57,7 +64,6 @@ export class ZoneCounterComponent {
       .pipe(delay(this.delayTime))
       .subscribe(() => {
         this.counter += 1;
-        log(this, 'incrementAfterAPICall', this.counter);
 
         if (this.manualChangeDetectionEnabled) this.cdr.markForCheck();
       });
@@ -65,7 +71,6 @@ export class ZoneCounterComponent {
 
   public reset() {
     this.counter = 0;
-    log(this, 'reset', this.counter);
 
     if (this.manualChangeDetectionEnabled) this.cdr.markForCheck();
   }

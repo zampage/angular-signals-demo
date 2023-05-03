@@ -42,6 +42,9 @@ header {
 .info {
   font-size: 1.2em;
 
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
   strong {
     font-size: 1.2em;
   }

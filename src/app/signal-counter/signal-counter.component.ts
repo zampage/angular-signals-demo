@@ -1,8 +1,13 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  signal,
+} from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { delay } from 'rxjs';
-import { log } from '../app.models';
 
 @Component({
   selector: 'app-signal-counter',
@@ -18,23 +23,25 @@ export class SignalCounterComponent {
   public delayTime = 1000;
 
   public counter = signal<number>(0);
+  public doubleCounter = computed(() => this.counter() * 2);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    effect(() =>
+      console.log(`[${this.COUNTER_NAME}] received new value ${this.counter()}`)
+    );
+  }
 
   public increment() {
     this.counter.update((c) => c + 1);
-    log(this, 'increment', this.counter());
   }
 
   public incrementByTwo() {
     this.counter.update((c) => c + 2);
-    log(this, 'increment', this.counter());
   }
 
   public incrementAfterTimeout() {
     setTimeout(() => {
       this.counter.update((c) => c + 1);
-      log(this, 'incrementAfterTimeout', this.counter());
     }, this.delayTime);
   }
 
@@ -42,14 +49,10 @@ export class SignalCounterComponent {
     this.http
       .get('https://dummyjson.com/products/1')
       .pipe(delay(this.delayTime))
-      .subscribe(() => {
-        this.counter.update((c) => c + 1);
-        log(this, 'incrementAfterAPICall', this.counter());
-      });
+      .subscribe(() => this.counter.update((c) => c + 1));
   }
 
   public reset() {
     this.counter.set(0);
-    log(this, 'reset', this.counter());
   }
 }
