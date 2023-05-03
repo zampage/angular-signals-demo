@@ -35,6 +35,13 @@ export class ZoneCounterComponent {
     if (this.manualChangeDetectionEnabled) this.cdr.markForCheck();
   }
 
+  public incrementByTwo() {
+    this.counter += 2;
+    log(this, 'increment', this.counter);
+
+    if (this.manualChangeDetectionEnabled) this.cdr.markForCheck();
+  }
+
   public incrementAfterTimeout() {
     setTimeout(() => {
       this.counter += 1;

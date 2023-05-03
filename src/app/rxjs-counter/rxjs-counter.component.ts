@@ -45,6 +45,11 @@ export class RxJsCounterComponent {
     this.counter$.pipe(take(1)).subscribe((n) => log(this, 'increment', n));
   }
 
+  public incrementByTwo() {
+    this.counterIncrement$.next(2);
+    this.counter$.pipe(take(1)).subscribe((n) => log(this, 'increment', n));
+  }
+
   public incrementAfterTimeout() {
     setTimeout(() => {
       this.counterIncrement$.next(1);

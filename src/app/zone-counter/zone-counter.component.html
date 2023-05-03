@@ -17,12 +17,15 @@
 </div>
 
 <div class="actions">
-  <button (click)="increment()">Increment</button>
+  <button (click)="increment()">Increment <small>(instant)</small></button>
+  <button (click)="incrementByTwo()">
+    Increment by 2 <small>(instant)</small>
+  </button>
   <button (click)="incrementAfterTimeout()">
-    Increment after timeout ({{ delayTime / 1000 }}s)
+    Increment after timeout <small>({{ delayTime / 1000 }}s delay)</small>
   </button>
   <button (click)="incrementAfterAPICall()">
-    Increment after API call (>{{ delayTime / 1000 }}s)
+    Increment after API call <small>(>{{ delayTime / 1000 }}s delay)</small>
   </button>
   <button (click)="reset()">Reset</button>
 </div>

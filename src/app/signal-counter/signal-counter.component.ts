@@ -26,6 +26,11 @@ export class SignalCounterComponent {
     log(this, 'increment', this.counter());
   }
 
+  public incrementByTwo() {
+    this.counter.update((c) => c + 2);
+    log(this, 'increment', this.counter());
+  }
+
   public incrementAfterTimeout() {
     setTimeout(() => {
       this.counter.update((c) => c + 1);
